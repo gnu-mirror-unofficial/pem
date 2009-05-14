@@ -1,0 +1,163 @@
+\input texinfo @c -*-texinfo-*-
+@c %**start of header
+@setfilename pem.info
+@settitle info pem
+@setchapternewpage odd
+@paragraphindent 5
+@firstparagraphindent insert
+@c %**end of header
+
+@set UPDATED May 12 2009
+@set EDITION 1
+@set VERSION 0.7.5
+
+@copying
+This file documents the @code{pem-@value{VERSION}} command, to help you
+keep track of your personal income and daily expenses.
+
+Copyright @copyright{} 2007 2008 2009 Prasad J Pandit
+
+Permission is granted to make and distribute verbatim copies of this
+manual, provided the copyright notice and this permission notice are
+preserved on all copies.
+@end copying
+
+@dircategory Individual utilities
+@direntry
+* pem: (pem).                                   Personal expenses manager.
+@end direntry
+
+@titlepage
+@title pem
+@subtitle personal expenses manager
+@subtitle Edition @value{EDITION}, for pem version @value{VERSION}
+@subtitle @value{UPDATED}
+@author by Prasad J Pandit
+@end titlepage
+
+@contents
+@ifnottex
+@node Top, Overview, (dir), (dir)
+@top pem-@value{VERSION}
+@end ifnottex
+@insertcopying
+
+@menu
+* Overview      :: An introduction to pem
+* Invoking pem  :: How to use pem
+* Problems      :: Reporting bugs
+@end menu
+
+@node Overview, Invoking pem, Top, Top
+@c node-name, next, previous, up
+@chapter Overview
+@section Introduction
+@code{pem} is a console based simple utility, to help you keep track of
+your personal income and expenses, in an unusually elegant manner.
+Obviously, using pem is extremely simple and easy. A command of the
+following form is all it takes
+
+    $ pem "Bus ticket" 10.75
+
+    $ pem -f myexpenses.txt Breakfast 20
+
+Pem, by default, stores these details in a CSV file, named after the
+current month, and placed in the `~/.pem' directory under your $HOME
+directory. You may also specify some other file using the `-f' option.
+Also, each amount is considered as an expenditure unless indicated
+otherwise by `-e' option.
+
+@section Tags/Categories:
+From version 0.7.4, @code{pem} introduced support for tags & categories
+of records. You can tag an income and/or expense record as
+
+    $ pem -c bills "Cell phone bill" 830.50
+
+    $ pem -c 'travel fun leisure' "Trip to Goa" 4500
+
+These are saved with tags 'bills' & 'travel fun leisure' respectively.
+Later, you can see very useful reports showing your category wise expense
+traits. Now @code{pem} also facilitates filtering of records using tags and
+description. Note that, while filtering records, @code{pem} first looks into
+the tags and when they don't match, goes for the description field.
+Ex. To see all your expenses on `travel', you can say
+
+    $ pem -s travel
+
+    $ pem -m travel
+
+While the first will list all your `travel' expenses in a month;
+The later will show the cumulative results for each month till date.
+
+@section How @code{pem} happened
+Well...for quite a few months I was looking for some means to get my
+expenses in order. As never before, have I had a slightest clue as to
+how much money do I spend in a month and what on earth do I spend it over.
+Of course there is/was nothing to bother about it, but still, I kind of
+wanted to know that.
+
+Often, we(me & my flat mate) would contemplate about a tool which is
+handy enough to use. All my Google searches failed to meet my
+expectations. All that I found were some or the other heavy, loaded with
+thousands of (useless)menus and buttons, GUI based accounts management
+programs.
+
+So, on one of those late Saturday night when I was browsing the Internet
+and slopping through my feeds, I started writing `pem'. And on Monday
+morning I had released the first working version 0.1 of @code{pem}. :)
+
+@node Invoking pem, Problems, Overview, Top
+@c node-name, next, previous, up
+@chapter Invoking pem
+@code{pem} can be invoked by a simple command as
+
+Usage: pem [OPTIONS] [<description> <amount> ...]
+
+Where, the OPTIONS could be zero or more of the following
+
+@table @samp
+@item -c
+@itemx --category <name>
+categorise/tag your expenses
+@item -e
+@itemx --earned
+indicates income
+@item -f
+@itemx --file <name>
+specify file to be used by pem
+
+@item -s [n]
+show daily report with total after [n] days
+@item -m [n]
+show monthly report with total after [n] months
+@item -C
+show category/tag-wise report
+@item -t
+@itemx --total
+show just the total
+
+@item -M
+@itemx --month <mm>
+select a month (01 <= mm <= 12)
+@item -Y
+@itemx --year <yy>
+select an year (00 <= yy <= 99)
+
+@item -h
+@itemx --help
+show this help
+@item -v
+@itemx --version
+show version information
+@end table
+
+@node Problems, , Invoking pem, Top
+@c node-name, next, previous, up
+@chapter Problems
+@section Reporting bugs
+If you think you have found a bug in @code{pem-@value{VERSION}}, please
+send an email to <pj.pandit-AT-yahoo.co.in> and while doing so,
+please include @code{pem-@value{VERSION}} string in the subject line,
+and describe precisely about the behaviour of @code{pem-@value{VERSION}}
+
+@bye
