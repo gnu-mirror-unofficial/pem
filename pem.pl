@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # pem.pl: Pem is a script to manage my personal income and expenses. This
-# file is a part of the `pem' project version 0.7.5
+# file is a part of the `pem' project version 0.7.6
 # Copyright (C) 2007 2008 2009 Prasad J Pandit
 #
 # `pem' is a free software; you can redistribute it and/or modify it under
@@ -20,7 +20,7 @@
 
 use strict;
 use POSIX qw(strftime);
-my ($prog, $ver, $pemdir, $fpem) = ("", "0.7.5", "", "");
+my ($prog, $ver, $pemdir, $fpem) = ("", "0.7.6", "", "");
 
 my ($DAILY, $MONTHLY, $CATEGORYWISE) = (1, 2, 4);
 my ($ern, $mode, $mstep, $spc, $lln) = (0, 0, 1, "\t", 0);
@@ -179,10 +179,12 @@ sub check_options
 
 sub initpem
 {
-    $yy = strftime ("%y", localtime (time)) if ($yy == 0);
-    $mm = strftime ("%m", localtime (time)) if ($mm == 0);
+    my $mi = $mm;
 
-    my $mnth = $mn[$mm - 1];
+    $mi = strftime ("%m", localtime (time)) if ($mi == 0);
+    $yy = strftime ("%y", localtime (time)) if ($yy == 0);
+
+    my $mnth = $mn[$mi - 1];
     if ($^O eq "MSWin32")
     {
         $pemdir = $ENV{"USERPROFILE"}."\\pem";
@@ -239,8 +241,8 @@ sub basename
 
     check_options ();
     usage () && exit 0 if (@ARGV == 0 && $mode == 0);
-    initpem ();
 
+    initpem ();
     if ($mode != 0)
     {
         show ($mode);
@@ -403,7 +405,10 @@ sub monthly
     printf ("$spc|%-26s|%12s|", "   Month  of  $i ", "Earned  ");
     printf ("%12s|%10s|\n", "Spent  ", "Exp/day ");
     printf ("$spc"); ln ("-", 65);
-    for ($i = 0; $i < @mn; $i++)
+
+    $i = 0;
+    $i = $mm - 1 if ($mm != 0);
+    for (; $i < @mn; $i++)
     {
         $mnth = $pemdir."/".$mn[$i] if ($^O eq "linux");
         $mnth = $pemdir."\\".$mn[$i] if ($^O eq "MSWin32");
