@@ -23,11 +23,11 @@ use POSIX qw(strftime);
 my ($prog, $ver, $pemdir, $fpem) = ("", "0.7.6", "", "");
 
 my ($DAILY, $MONTHLY, $CATEGORYWISE) = (1, 2, 4);
-my ($ern, $mode, $mstep, $spc, $lln) = (0, 0, 1, "\t", 0);
-my ($mm, $yy, $tdays, $totl, $dfmt, $tag) = (0, 0, 0, 0, "", "");
-
 my @mn = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @wd = qw( Sunday Monday Tuesday Wednesday Thursday Friday Saturday );
+
+my ($ern, $mode, $mstep, $spc, $lln) = (0, 0, 1, "\t", 0);
+my ($mm, $em, $yy, $tdays, $totl, $dfmt, $tag) = (0, 0, 0, 0, 0, "", "");
 
 
 sub usage
@@ -52,11 +52,12 @@ sub printh
     printf ($fmt, "  -s [n]", "show daily report with total after [n] days");
     printf ($fmt, "  -m [n]", "monthly report with total after [n] months");
     printf ($fmt, "  -C", "show category/tag-wise report");
-    printf ($fmt, "  -t --total", "show just the total");
+    printf ($fmt, "  -t --total", "shows just the total when used with -s");
 
     printf ("\n");
-    printf ($fmt, "  -M --month <mm>", "select a month (01 <= mm <= 12)");
-    printf ($fmt, "  -Y --year  <yy>", "select an year (00 <= yy <= 99)");
+    printf ($fmt, "  -M <mm>", "select the start month (01 <= mm <= 12)");
+    printf ($fmt, "  -N <mm>", "select an end month (01 <= mm <= 12)");
+    printf ($fmt, "  -Y <yy>", "select an year (00 <= yy <= 99)");
 
     printf ("\n");
     printf ($fmt, "  -h --help", "show this help");
@@ -118,19 +119,37 @@ sub check_options
                     $mstep = $ARGV[++$i];
                     $cnt++;
 
-                    $mstep = 01 if ($mstep < 01);
                     $mstep = 12 if ($mstep > 12);
                 }
             }
         }
-        elsif ($arg eq "-M" || $arg eq "--month")
+        elsif ($arg eq "-M")
         {
             die ("$prog: value <mm> missing\n") if ($arg eq $ARGV[$#ARGV]);
 
+            $cnt++;
+            if ($ARGV[$i + 1] =~ /[^\d]+/)
+            {
+                die ("$prog: -M <mm> should be numeric and between 1..12\n");
+            }
             $mm = $ARGV[++$i];
-            die ("$prog: <mm> should be between 1..12\n")
-                            if ($mm =~ /[^\d]+/ || $mm < 1 || $mm > 12);
-            $cnt += 2;
+            $cnt++;
+
+            $mm = 12 if ($mm > 12);
+        }
+        elsif ($arg eq "-N")
+        {
+            die ("$prog: value <mm> missing\n") if ($arg eq $ARGV[$#ARGV]);
+
+            $cnt++;
+            if ($ARGV[$i + 1] =~ /[^\d]+/)
+            {
+                die ("$prog: -N <mm> should be numeric and between 1..12\n");
+            }
+            $em = $ARGV[++$i];
+            $cnt++;
+
+            $em = 12 if ($em > 12);
         }
         elsif ($arg eq "-s")
         {
@@ -179,12 +198,8 @@ sub check_options
 
 sub initpem
 {
-    my $mi = $mm;
-
-    $mi = strftime ("%m", localtime (time)) if ($mi == 0);
     $yy = strftime ("%y", localtime (time)) if ($yy == 0);
 
-    my $mnth = $mn[$mi - 1];
     if ($^O eq "MSWin32")
     {
         $pemdir = $ENV{"USERPROFILE"}."\\pem";
@@ -199,7 +214,6 @@ sub initpem
             mkdir ($pemdir) if (!defined (-e ($pemdir)));
             die ("$prog: could not create `$pemdir'\n") if (-d ($pemdir) != 1);
         }
-        $fpem = $pemdir."\\".$mnth if ($fpem eq "");
     }
     else  # It is Linux or Unix :)
     {
@@ -215,7 +229,6 @@ sub initpem
             mkdir ($pemdir) if (!defined (-e ($pemdir)));
             die ("$prog: could not create `$pemdir'\n") if (-d ($pemdir) != 1);
         }
-        $fpem = $pemdir."/".$mnth if ($fpem eq "");
     }
 }
 
@@ -248,8 +261,16 @@ sub basename
         show ($mode);
         exit 0;
     }
-
     die ("$prog: amount missing!\n") if (@ARGV % 2 != 0);
+
+    if ($fpem eq "")
+    {
+        $mm = strftime ("%m", localtime (time));
+
+        $fpem = $pemdir."/".$mn[$mm - 1] if ($^O eq "linux");
+        $fpem = $pemdir."\\".$mn[$mm - 1] if ($^O eq "MSWin32");
+    }
+
     open (FPEM, ">>$fpem") or die ("$prog: could not open file `$fpem'\n");
     for ($i = 0; $i < @ARGV; $i += 2)
     {
@@ -280,15 +301,47 @@ sub basename
 
 sub show
 {
-    daily () if ($_[0] & $DAILY);
-    monthly () if ($_[0] & $MONTHLY);
-    categorywise () if ($_[0] & $CATEGORYWISE);
+    my ($lower, $upper, $flag) = ($mm, $em, 0);
+
+    if ($_[0] & $DAILY  ||  $_[0] & $CATEGORYWISE)
+    {
+        if ($lower == 0)
+        {
+            $lower = 1 if ($upper != 0);
+            $lower = strftime ("%m", localtime (time)) if ($upper == 0);
+        }
+
+        $upper = $lower if ($fpem ne "" || $upper == 0);
+        $upper = strftime ("%m", localtime (time)) if ($upper == 0);
+
+        for (my $i = $lower; $i <= $upper; $i++)
+        {
+            if ($flag == 1) { $fpem = ""; print "\n"; }
+            
+            if ($fpem eq "")
+            {
+                $fpem = $pemdir."/".$mn[$i - 1] if ($^O eq "linux");
+                $fpem = $pemdir."\\".$mn[$i - 1] if ($^O eq "MSWin32");
+                $flag = 1;
+            }
+
+            daily ($fpem) if ($_[0] & $DAILY);
+            categorywise ($fpem) if ($_[0] & $CATEGORYWISE);
+        }
+    }
+
+    $lower = 1 if ($mm == 0);
+    $upper = strftime ("%m", localtime (time)) if ($em == 0);
+
+    monthly ($lower - 1, $upper - 1) if ($_[0] & $MONTHLY);
 }
 
 
+# daily: shows daily income/expenses. Accepts file path as an argument.
+#
 sub daily
 {
-    my (@col) = ("");
+    my ($file, @col) = ($_[0], "");
     my ($tern, $tspnt, $wday, $dt) =  (0, 0, "", "");
     my ($cnt, $flag, $rec, $ldt) = (0, 0, "", "0");
 
@@ -296,9 +349,9 @@ sub daily
     {
         $ENV{"PEMTIME"} = "%b-%d %y";
     }
-
-    open (FPEM, "$fpem") or die ("$prog: could not open file `$fpem'\n");
-    die ("$prog: input file `$fpem' is empty\n") if (-z FPEM);
+    
+    open (FPEM, "$file") or die ("$prog: could not open file `$file'\n");
+    die ("$prog: input file `$file' is empty\n") if (-z FPEM);
     while ($rec = <FPEM>)
     {
         chomp ($rec);
@@ -358,7 +411,6 @@ sub daily
         printf ("%21.2f|\n", $tspnt / no_of_days ($col[0]));
         printf ("$spc"); ln ("-", $lln);
     }
-
     close FPEM;
 }
 
@@ -396,24 +448,23 @@ sub monthly
 {
     my @inc = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     my @exp = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    my ($te, $ts, $tern, $tspnt) = (0, 0, 0, 0, 0);
-    my ($mname, $mnth, $rec, @col) = ("", "", "", "");
-    my ($i, $td, $cnt, $nday, $tday) = (0, 0, 0, 0, 0);
 
-    $i = strftime ("%C", localtime(time()))."$yy";
+    my ($i, $rec, @col) = (0, "", "");
+    my ($td, $cnt, $nday, $tday) = (0, 0, 0, 0);
+    my ($te, $ts, $tern, $tspnt) = (0, 0, 0, 0, 0);
+
     printf ("$spc"); ln ("-", 65);
-    printf ("$spc|%-26s|%12s|", "   Month  of  $i ", "Earned  ");
+    $rec = strftime ("%C", localtime(time()))."$yy";
+    printf ("$spc|%-26s|%12s|", "   Month  of  $rec ", "Earned  ");
     printf ("%12s|%10s|\n", "Spent  ", "Exp/day ");
     printf ("$spc"); ln ("-", 65);
 
-    $i = 0;
-    $i = $mm - 1 if ($mm != 0);
-    for (; $i < @mn; $i++)
+    for ($i = $_[0]; $i <= $_[1]; $i++)
     {
-        $mnth = $pemdir."/".$mn[$i] if ($^O eq "linux");
-        $mnth = $pemdir."\\".$mn[$i] if ($^O eq "MSWin32");
+        $fpem = $pemdir."/".$mn[$i] if ($^O eq "linux");
+        $fpem = $pemdir."\\".$mn[$i] if ($^O eq "MSWin32");
 
-        next if (!defined (open (FPEM, "$mnth")) || (-z FPEM));
+        next if (!defined (open (FPEM, "$fpem")) || (-z FPEM));
 
         while ($rec = <FPEM>)
         {
@@ -437,15 +488,16 @@ sub monthly
         next if ($exp[$i] == 0  &&  $inc[$i] == 0);
 
         $cnt++;
-        $mname = strftime ("%B", localtime ($col[0]));
-        $nday = no_of_days ($col[0]);
         $tern += $inc[$i];
         $tspnt += $exp[$i];
+
+        $fpem = strftime ("%B", localtime ($col[0]));
+        $nday = no_of_days ($col[0]);
         $tday += $nday;
 
         if ($mstep == 1)
         {
-            printf ("$spc|%-26s|%12.2f|", $mname, $inc[$i]);
+            printf ("$spc|%-26s|%12.2f|", $fpem, $inc[$i]);
             printf ("%12.2f|%10.2f|\n", $exp[$i], $exp[$i] / $nday);
             printf ("$spc"); ln ("-", 65);
         }
@@ -454,8 +506,8 @@ sub monthly
             my ($avg) = ($tspnt - $ts) / ($tday - $td);
             my ($mnm) = strftime ("%m", localtime ($col[0]));
 
-            $mname = $mn[$mnm - $mstep]." - $mname";
-            printf ("$spc|%-26s|%12.2f|", $mname, $tern - $te);
+            $fpem = $mn[$mnm - $mstep]." - $fpem";
+            printf ("$spc|%-26s|%12.2f|", $fpem, $tern - $te);
             printf ("%12.2f|%10.2f|\n", $tspnt - $ts, $avg);
             printf ("$spc"); ln ("-", 65);
 
@@ -477,14 +529,16 @@ sub monthly
 
 
 # categorywise: shows cumulative income/expenses for each tag or category.
+# Accepts file path as an argument.
 #
 sub categorywise
 {
+    my $file = $_[0];
     my (%tag, @col) = ((), ());
     my ($rec, $flag) = ("", 0);
 
-    open (FPEM, "$fpem") or die ("$prog: could not open file: `$fpem'\n");
-    die ("$prog: input file `$fpem' is empty\n") if (-z FPEM);
+    open (FPEM, "$file") or die ("$prog: could not open file: `$file'\n");
+    die ("$prog: input file `$file' is empty\n") if (-z FPEM);
     while ($rec = <FPEM>)
     {
         chomp ($rec);
