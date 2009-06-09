@@ -18,7 +18,8 @@
 \"
 
 .TH pem 1
-pem-v0.7.6 \- personal expenses manager
+.SH NAME
+\fBpem\fR \- personal expenses manager
 .SH SYNOPSYS
 .TP 5
 \fBpem\fR [\fBOPTIONS\fR] [<description> <amount> ...]
@@ -29,12 +30,12 @@ expenses. Needless to say, using \fBpem\fR is extremely simple and easy.
 A command of the following form is all it takes
 .LP
     $ pem "Bus ticket" 10.75
-    $ pem -f myexpenses.txt Breakfast 20
+    $ pem \-f myexpenses.txt Breakfast 20
 .LP
 \fBpem\fR, by default, stores these details in a CSV file, named after the
 current month, and placed in the `~/.pem' directory under your $HOME directory.
-You may also specify some other file using the `-f' option. Also, each amount
-is considered as an expenditure unless indicated otherwise by `-e' option.
+You may also specify some other file using the `\-f' option. Also, each amount
+is considered as an expenditure unless indicated otherwise by `\-e' option.
 
 .LP
 Tags/Categories:
@@ -44,8 +45,8 @@ Tags/Categories:
 From version 0.7.4, \fBpem\fR introduced support for tags & categories of
 records. You can tag an income and/or expense record as
 .LP
-    $ pem -c bills "Cell phone bill" 830.50
-    $ pem -c 'travel fun leisure' "Trip to Goa" 4500
+    $ pem \-c bills "Cell phone bill" 830.50
+    $ pem \-c 'travel fun leisure' "Trip to Goa" 4500
 .LP
 These are saved with the tags 'bills' & 'travel fun leisure' respectively.
 Later, you can see very useful reports showing your category wise expense
@@ -54,8 +55,8 @@ description. Note that, while filtering records, \fBpem\fR first looks into
 the tags and when they don't match, goes for the description field.
 Ex. To see all your expenses on `travel', you can say
 .LP
-    $ pem -s travel
-    $ pem -m travel
+    $ pem \-s travel
+    $ pem \-m travel
 .LP
 While the first will list all your `travel' expenses in a month; The later
 will show the cumulative results for each month till date. Other than this,
@@ -83,7 +84,7 @@ will show the cumulative results for each month till date. Other than this,
  show category/tag-wise report
 .TP
 .B \-t \-\-total
-shows just the total when used it with -s
+shows just the total when used it with \-s
 .br
 .TP
 .B \-M <mm>

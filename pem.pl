@@ -317,7 +317,7 @@ sub show
         for (my $i = $lower; $i <= $upper; $i++)
         {
             if ($flag == 1) { $fpem = ""; print "\n"; }
-            
+
             if ($fpem eq "")
             {
                 $fpem = $pemdir."/".$mn[$i - 1] if ($^O eq "linux");
@@ -349,7 +349,7 @@ sub daily
     {
         $ENV{"PEMTIME"} = "%b-%d %y";
     }
-    
+
     open (FPEM, "$file") or die ("$prog: could not open file `$file'\n");
     die ("$prog: input file `$file' is empty\n") if (-z FPEM);
     while ($rec = <FPEM>)
