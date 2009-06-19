@@ -1,6 +1,6 @@
 This is pem.info, produced by makeinfo version 4.12 from pem.texi.
 
-This file documents the `pem-0.7.6' command, to help you keep track of
+This file documents the `pem-0.7.7' command, to help you keep track of
 your personal income and daily expenses.
 
      Copyright (C) 2007 2008 2009 Prasad J Pandit
@@ -17,10 +17,10 @@ END-INFO-DIR-ENTRY
 
 File: pem.info,  Node: Top,  Next: Overview,  Prev: (dir),  Up: (dir)
 
-pem-0.7.6
+pem-0.7.7
 *********
 
-     This file documents the `pem-0.7.6' command, to help you keep
+     This file documents the `pem-0.7.7' command, to help you keep
 track of your personal income and daily expenses.
 
      Copyright (C) 2007 2008 2009 Prasad J Pandit
@@ -166,10 +166,10 @@ File: pem.info,  Node: Problems,  Prev: Invoking pem,  Up: Top
 3.1 Reporting bugs
 ==================
 
-     If you think you have found a bug in `pem-0.7.6', please send an
+     If you think you have found a bug in `pem-0.7.7', please send an
 email to <pj.pandit-AT-yahoo.co.in> and while doing so, please include
-`pem-0.7.6' string in the subject line, and describe precisely about
-the behaviour of `pem-0.7.6'
+`pem-0.7.7' string in the subject line, and describe precisely about
+the behaviour of `pem-0.7.7'
 
 
 

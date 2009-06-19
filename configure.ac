@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.61)
-AC_INIT([pem], [0.7.6], [pj.pandit@yahoo.co.in])
+AC_INIT([pem], [0.7.7], [pj.pandit@yahoo.co.in])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([pem.pl])
 AC_CONFIG_HEADER([config.h])

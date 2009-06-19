@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # pem.pl: Pem is a script to manage my personal income and expenses. This
-# file is a part of the `pem' project version 0.7.6
+# file is a part of the `pem' project version 0.7.7
 # Copyright (C) 2007 2008 2009 Prasad J Pandit
 #
 # `pem' is a free software; you can redistribute it and/or modify it under
@@ -19,10 +19,12 @@
 #
 
 use strict;
+use warnings;
 use POSIX qw(strftime);
-my ($prog, $ver, $pemdir, $fpem) = ("", "0.7.6", "", "");
 
 my ($DAILY, $MONTHLY, $CATEGORYWISE) = (1, 2, 4);
+my ($ver, $prog, $pemdir, $fpem) = ("0.7.7", "", "", "");
+
 my @mn = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @wd = qw( Sunday Monday Tuesday Wednesday Thursday Friday Saturday );
 
@@ -33,6 +35,7 @@ my ($mm, $em, $yy, $tdays, $totl, $dfmt, $tag) = (0, 0, 0, 0, 0, "", "");
 sub usage
 {
     printf ("Usage: %s [OPTIONS] [<description> <amount> ...]\n", $prog);
+    return;
 }
 
 
@@ -65,6 +68,8 @@ sub printh
 
     printf ("\n");
     printf ("Report bugs to <pj.pandit\@yahoo.co.in>\n");
+
+    return;
 }
 
 
@@ -78,7 +83,7 @@ sub check_options
         $arg = $ARGV[$i];
         if ($arg eq "-c" || $arg eq "--category")
         {
-            die ("$prog: value <name> missing\n") if ($arg eq $ARGV[$#ARGV]);
+            die ("$prog: value <name> missing\n") if ($arg eq $ARGV[-1]);
             $arg = $ARGV[++$i];
             $tag = $arg;
 
@@ -98,7 +103,7 @@ sub check_options
         }
         elsif ($arg eq "-f" || $arg eq "--file")
         {
-            die ("$prog: filename missing\n") if ($arg eq $ARGV[$#ARGV]);
+            die ("$prog: filename missing\n") if ($arg eq $ARGV[-1]);
             $fpem = $ARGV[++$i];
             $cnt += 2;
         }
@@ -112,7 +117,7 @@ sub check_options
             $mode |= $MONTHLY;       # show monthly report
             $cnt++;
 
-            if ($arg ne $ARGV[$#ARGV])
+            if ($arg ne $ARGV[-1])
             {
                 if ($ARGV[$i + 1] =~ /^\d+$/)
                 {
@@ -125,7 +130,7 @@ sub check_options
         }
         elsif ($arg eq "-M")
         {
-            die ("$prog: value <mm> missing\n") if ($arg eq $ARGV[$#ARGV]);
+            die ("$prog: value <mm> missing\n") if ($arg eq $ARGV[-1]);
 
             $cnt++;
             if ($ARGV[$i + 1] =~ /[^\d]+/)
@@ -139,7 +144,7 @@ sub check_options
         }
         elsif ($arg eq "-N")
         {
-            die ("$prog: value <mm> missing\n") if ($arg eq $ARGV[$#ARGV]);
+            die ("$prog: value <mm> missing\n") if ($arg eq $ARGV[-1]);
 
             $cnt++;
             if ($ARGV[$i + 1] =~ /[^\d]+/)
@@ -156,7 +161,7 @@ sub check_options
             $mode |= $DAILY;         # show daily report
             $cnt++;
 
-            if ($arg ne $ARGV[$#ARGV])
+            if ($arg ne $ARGV[-1])
             {
                 if ($ARGV[$i + 1] =~ /^\d+$/)
                 {
@@ -177,7 +182,7 @@ sub check_options
         }
         elsif ($arg eq "-Y" || $arg eq "--year")
         {
-            die ("$prog: value <yy> missing\n") if ($arg eq $ARGV[$#ARGV]);
+            die ("$prog: value <yy> missing\n") if ($arg eq $ARGV[-1]);
 
             $yy = $ARGV[++$i];
             die ("$prog: year should be a numeric value like 2008 or 08\n")
@@ -193,6 +198,8 @@ sub check_options
         }
     }
     shift @ARGV while ($cnt-- > 0);
+
+    return;
 }
 
 
@@ -230,16 +237,21 @@ sub initpem
             die ("$prog: could not create `$pemdir'\n") if (-d ($pemdir) != 1);
         }
     }
+
+    return;
 }
 
 
 sub basename
 {
-    my ($slash, $pos, $prg) = ("/", 0, "");
+    my @formal = @_;
+
+    my ($slash, $pos) = ("/", 0);
+    my ($path, $prg) = ($formal[0], "");
 
     $slash = "\\" if ($^O eq "MSWin32");
-    $pos = rindex $_[0], $slash;
-    chomp ($prg = substr ($_[0], $pos + 1));
+    $pos = rindex $path, $slash;
+    chomp ($prg = substr ($path, $pos + 1));
 
     return $prg;
 }
@@ -247,18 +259,21 @@ sub basename
 
 # main ()
 {
+    my $FPEM = undef;
     my ($i, $ernd, $spnt) = (0, 0, 0);
 
     $prog = basename ($0);
-    usage () && exit 0 if (@ARGV < 1);
-
     check_options ();
-    usage () && exit 0 if (@ARGV == 0 && $mode == 0);
+    if (@ARGV == 0 && $mode == 0)
+    {
+        usage ();
+        exit 0;
+    }
 
     initpem ();
     if ($mode != 0)
     {
-        show ($mode);
+        show ();
         exit 0;
     }
     die ("$prog: amount missing!\n") if (@ARGV % 2 != 0);
@@ -271,7 +286,7 @@ sub basename
         $fpem = $pemdir."\\".$mn[$mm - 1] if ($^O eq "MSWin32");
     }
 
-    open (FPEM, ">>$fpem") or die ("$prog: could not open file `$fpem'\n");
+    open($FPEM, ">>", "$fpem") or die ("$prog: could not open file `$fpem'\n");
     for ($i = 0; $i < @ARGV; $i += 2)
     {
         if ($ARGV[$i] =~ /,/)
@@ -289,11 +304,11 @@ sub basename
             printf ("$prog: amount must be numeric!\n");
             last;
         }
-        printf FPEM "%ld,%s,%.2f,%.2f,%s\n",
+        printf $FPEM "%ld,%s,%.2f,%.2f,%s\n",
                                     time (), $ARGV[$i], $ernd, $spnt, $tag;
         $ernd = $spnt = 0;
     }
-    close FPEM;
+    close $FPEM;
 
     exit 0;
 }
@@ -303,7 +318,7 @@ sub show
 {
     my ($lower, $upper, $flag) = ($mm, $em, 0);
 
-    if ($_[0] & $DAILY  ||  $_[0] & $CATEGORYWISE)
+    if ($mode & $DAILY  ||  $mode & $CATEGORYWISE)
     {
         if ($lower == 0)
         {
@@ -317,7 +332,7 @@ sub show
         for (my $i = $lower; $i <= $upper; $i++)
         {
             if ($flag == 1) { $fpem = ""; print "\n"; }
-
+            
             if ($fpem eq "")
             {
                 $fpem = $pemdir."/".$mn[$i - 1] if ($^O eq "linux");
@@ -325,15 +340,17 @@ sub show
                 $flag = 1;
             }
 
-            daily ($fpem) if ($_[0] & $DAILY);
-            categorywise ($fpem) if ($_[0] & $CATEGORYWISE);
+            daily ($fpem) if ($mode & $DAILY);
+            categorywise ($fpem) if ($mode & $CATEGORYWISE);
         }
     }
 
     $lower = 1 if ($mm == 0);
     $upper = strftime ("%m", localtime (time)) if ($em == 0);
 
-    monthly ($lower - 1, $upper - 1) if ($_[0] & $MONTHLY);
+    monthly ($lower - 1, $upper - 1) if ($mode & $MONTHLY);
+
+    return;
 }
 
 
@@ -341,18 +358,18 @@ sub show
 #
 sub daily
 {
-    my ($file, @col) = ($_[0], "");
-    my ($tern, $tspnt, $wday, $dt) =  (0, 0, "", "");
+    my @formal = @_;
+
     my ($cnt, $flag, $rec, $ldt) = (0, 0, "", "0");
+    my ($tern, $tspnt, $wday, $dt) =  (0, 0, "", "");
+    my ($file, @col, $FPEM) = ($formal[0], "", undef);
 
-    if (!defined ($ENV{"PEMTIME"}) || $ENV{"PEMTIME"} eq "")
-    {
-        $ENV{"PEMTIME"} = "%b-%d %y";
-    }
-
-    open (FPEM, "$file") or die ("$prog: could not open file `$file'\n");
-    die ("$prog: input file `$file' is empty\n") if (-z FPEM);
-    while ($rec = <FPEM>)
+    local $ENV{"PEMTIME"} = "%b-%d %y"
+                    if (!defined ($ENV{"PEMTIME"}) || $ENV{"PEMTIME"} eq "");
+    
+    open ($FPEM, "<", "$file") or die ("$prog: could not open file `$file'\n");
+    die ("$prog: input file `$file' is empty\n") if (-z $FPEM);
+    while ($rec = <$FPEM>)
     {
         chomp ($rec);
         @col = split (',', $rec);
@@ -411,13 +428,18 @@ sub daily
         printf ("%21.2f|\n", $tspnt / no_of_days ($col[0]));
         printf ("$spc"); ln ("-", $lln);
     }
-    close FPEM;
+    close $FPEM;
+
+    return;
 }
 
 
 sub show_total
 {
-    my ($ldt, $wday, $tern, $tspnt) = ($_[0], $_[1], $_[2], $_[3]);
+    my @formal = @_;
+
+    my ($ldt, $wday) = ($formal[0], $formal[1]);
+    my ($tern, $tspnt) = ($formal[2], $formal[3]);
 
     printf ("$spc"); ln ("-", $lln);
     printf ("$spc|$dfmt|%-30s|", $ldt, $wday." (Total)");
@@ -429,23 +451,31 @@ sub show_total
         printf ("$spc|$dfmt|%-30s|", "", "Balance");
         printf ("%21.2f|\n", $tern - $tspnt);
     }
+
+    return;
 }
 
 
 sub ln
 {
-    my ($i, $c, $len) = (0, $_[0], $_[1]);
+    my @formal = @_;
+    my ($i, $c, $len) = (0, $formal[0], $formal[1]);
 
     for ($i = 0; $i < $len; $i++)
     {
         printf ("%s", $c);
     }
     printf ("\n");
+
+    return;
 }
 
 
 sub monthly
 {
+    my @formal = @_;
+    my ($lower, $upper) = ($formal[0], $formal[1]);
+
     my @inc = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     my @exp = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -459,14 +489,15 @@ sub monthly
     printf ("%12s|%10s|\n", "Spent  ", "Exp/day ");
     printf ("$spc"); ln ("-", 65);
 
-    for ($i = $_[0]; $i <= $_[1]; $i++)
+    for ($i = $lower; $i <= $upper; $i++)
     {
         $fpem = $pemdir."/".$mn[$i] if ($^O eq "linux");
         $fpem = $pemdir."\\".$mn[$i] if ($^O eq "MSWin32");
 
-        next if (!defined (open (FPEM, "$fpem")) || (-z FPEM));
+        my $FPEM = undef;
+        next if (!defined (open ($FPEM, "<", "$fpem")) || (-z $FPEM));
 
-        while ($rec = <FPEM>)
+        while ($rec = <$FPEM>)
         {
             chomp ($rec);
             @col = split (',', $rec);
@@ -483,7 +514,7 @@ sub monthly
             $inc[$i] += $col[2];
             $exp[$i] += $col[3];
         }
-        close FPEM;
+        close $FPEM;
 
         next if ($exp[$i] == 0  &&  $inc[$i] == 0);
 
@@ -525,6 +556,8 @@ sub monthly
         printf ("%10s|\n", "");
         printf ("$spc"); ln ("-", 65);
     }
+
+    return;
 }
 
 
@@ -533,13 +566,15 @@ sub monthly
 #
 sub categorywise
 {
-    my $file = $_[0];
+    my @formal = @_;
+    my ($file, $FPEM) = ($formal[0], undef);
+
     my (%tag, @col) = ((), ());
     my ($rec, $flag) = ("", 0);
 
-    open (FPEM, "$file") or die ("$prog: could not open file: `$file'\n");
-    die ("$prog: input file `$file' is empty\n") if (-z FPEM);
-    while ($rec = <FPEM>)
+    open($FPEM, "<", "$file") or die ("$prog: could not open file: `$file'\n");
+    die ("$prog: input file `$file' is empty\n") if (-z $FPEM);
+    while ($rec = <$FPEM>)
     {
         chomp ($rec);
         @col = split (',', $rec);
@@ -547,10 +582,10 @@ sub categorywise
         next if (!defined ($col[4]));
 
         my ($ern, $exp) = ($col[2], $col[3]);
-        my ($key, $s) = ("", join (' ', sort (split (' ', $col[4]))));
+        my ($s) = (join (' ', sort (split (' ', $col[4]))));
 
         $flag = 0;
-        foreach $key (sort (keys (%tag)))
+        foreach my $key (sort (keys (%tag)))
         {
             if (is_subset ($key, $s))
             {
@@ -570,7 +605,7 @@ sub categorywise
         }
         $tag{$s} = [ $ern, $exp ] if ($flag == 0);
     }
-    close FPEM;
+    close $FPEM;
 
     my ($tern, $tspnt) = (0, 0);
     my $mn = strftime ("%B %Y", localtime ($col[0]));
@@ -591,6 +626,8 @@ sub categorywise
     printf ("$spc|%-41s|%10.2f|", "Total ", $tern);
     printf ("%10.2f|\n", $tspnt);
     printf ("$spc"); ln ("-", 65);
+
+    return;
 }
 
 
@@ -599,7 +636,8 @@ sub categorywise
 #
 sub is_subset
 {
-    my ($ret, $a, $b) = (1, $_[0], $_[1]);
+    my @formal = @_;
+    my ($ret, $a, $b) = (1, $formal[0], $formal[1]);
 
     my @list = sort (split (' ', $b));
 
@@ -619,7 +657,8 @@ sub is_subset
 
 sub no_of_days
 {
-    my ($mn, $yr, $tsec) = (0, 0, shift (@_));
+    my @formal = @_;
+    my ($mn, $yr, $tsec) = (0, 0, shift (@formal));
     my @mnd = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
     $mn = strftime ("%m", localtime ($tsec));
@@ -628,5 +667,6 @@ sub no_of_days
         $yr = strftime ("%Y", localtime ($tsec));
         return 29 if ($yr % 100 == 0 && $yr % 400 == 0) || ($yr % 4 == 0);
     }
+
     return $mnd[$mn - 1];
 }

@@ -7,9 +7,9 @@
 @firstparagraphindent insert
 @c %**end of header
 
-@set UPDATED May 27 2009
+@set UPDATED Jun 19 2009
 @set EDITION 1
-@set VERSION 0.7.6
+@set VERSION 0.7.7
 
 @copying
 This file documents the @code{pem-@value{VERSION}} command, to help you
