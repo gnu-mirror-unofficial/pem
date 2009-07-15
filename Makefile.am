@@ -1,9 +1,9 @@
 ##
 ## Process this file with automake to produce 'Makefile.in'
-## 
+##
 ## To create the configure script using this file follow these steps
 ## in order
-## 1. write Makefile.am    
+## 1. write Makefile.am
 ## 2. autoscan
 ## 3. aclocal
 ## 4. autoheader
@@ -14,7 +14,7 @@
 bin_PROGRAMS = pem
 pem_SOURCES = pem.pl
 
-man1_MANS = pem.1 
+man1_MANS = pem.1
 info_TEXINFOS = pem.texi
 
 dist_man_MANS = pem.1

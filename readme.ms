@@ -58,7 +58,12 @@ $ make
 By default, this should install Pem under /usr/local/bin directory, assuming
 you have the right privileges to do that. You may also consider changing the
 prefix using the --prefix option, in case you don't have the necessary
-permissions. For more information please see: ./configure --help.
+permissions. For more information please see:
+.sp
+.in +5
+$ ./configure --help.
+.in -5
+
 .LP
 On Windows:
 .br

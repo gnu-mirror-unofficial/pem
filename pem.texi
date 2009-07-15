@@ -22,7 +22,7 @@ manual, provided the copyright notice and this permission notice are
 preserved on all copies.
 @end copying
 
-@dircategory Individual utilities
+@dircategory Utilities
 @direntry
 * pem: (pem).                                   Personal expenses manager.
 @end direntry

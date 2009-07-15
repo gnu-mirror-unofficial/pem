@@ -32,14 +32,16 @@
             directory,  assuming  you  have  the  right privileges to do
             that. You may also consider changing the  prefix  using  the
             --prefix  option,  in  case  you  don’t  have  the necessary
-            permissions. For more information  please  see:  ./configure
-            --help.
+            permissions. For more information please see:
+
+                 $ ./configure --help.
+
 
             On Windows:
             -----------
-                Copy  and  paste  the pem.pl file to the directory where
-            you keep your other executable files, and  make  sure,  this
-            directory  is  included in your %PATH% variable. That’s all,
+                Copy and paste the pem.pl file to  the  directory  where
+            you  keep  your  other executable files, and make sure, this
+            directory is included in your %PATH% variable.  That’s  all,
             Pem is ready to serve you. :)
 
             For usage information about pem, on Linux, try
@@ -52,15 +54,17 @@
 
                  C:\> pem.pl --help
 
-            Also, use the pem.txt file to explore what Pem can  do,  and
+            Also,  use  the pem.txt file to explore what Pem can do, and
             how it does that.
+
 
             Bugs/Comments:
             --------------
 
                  Please send any suggestions/comments or bug reports you
-            may have, to <pj.pandit@yahoo.co.in>. They are most  welcome
+            may  have, to <pj.pandit@yahoo.co.in>. They are most welcome
             and appreciated.
+
 
 
             Thank you!

@@ -9,7 +9,7 @@ your personal income and daily expenses.
 this manual, provided the copyright notice and this permission notice
 are preserved on all copies.
 
-INFO-DIR-SECTION Individual utilities
+INFO-DIR-SECTION Utilities
 START-INFO-DIR-ENTRY
 * pem: (pem).                                   Personal expenses manager.
 END-INFO-DIR-ENTRY
@@ -174,9 +174,9 @@ the behaviour of `pem-0.7.7'
 
 
 Tag Table:
-Node: Top555
-Node: Overview1107
-Node: Invoking pem3609
-Node: Problems4513
+Node: Top544
+Node: Overview1096
+Node: Invoking pem3598
+Node: Problems4502
 
 End Tag Table

@@ -282,7 +282,7 @@ sub basename
     {
         $mm = strftime ("%m", localtime (time));
 
-        $fpem = $pemdir."/".$mn[$mm - 1] if ($^O eq "linux");
+        $fpem = $pemdir."/".$mn[$mm - 1];
         $fpem = $pemdir."\\".$mn[$mm - 1] if ($^O eq "MSWin32");
     }
 
@@ -291,7 +291,7 @@ sub basename
     {
         if ($ARGV[$i] =~ /,/)
         {
-            printf ("$prog: hey, don't use comma(,) in the description!\n");
+            printf ("$prog: don't use comma(,) in the description!\n");
             last;
         }
         if ($ARGV[$i + 1] =~ /^\d*[\.]?\d+$/)
@@ -316,7 +316,7 @@ sub basename
 
 sub show
 {
-    my ($lower, $upper, $flag) = ($mm, $em, 0);
+    my ($lower, $upper, $ret) = ($mm, $em, 0);
 
     if ($mode & $DAILY  ||  $mode & $CATEGORYWISE)
     {
@@ -331,17 +331,18 @@ sub show
 
         for (my $i = $lower; $i <= $upper; $i++)
         {
-            if ($flag == 1) { $fpem = ""; print "\n"; }
-            
+            if ($ret) { print "\n"; $ret = 0; }
+
             if ($fpem eq "")
             {
-                $fpem = $pemdir."/".$mn[$i - 1] if ($^O eq "linux");
+                $fpem = $pemdir."/".$mn[$i - 1];
                 $fpem = $pemdir."\\".$mn[$i - 1] if ($^O eq "MSWin32");
-                $flag = 1;
             }
 
-            daily ($fpem) if ($mode & $DAILY);
-            categorywise ($fpem) if ($mode & $CATEGORYWISE);
+            $ret = daily ($fpem) if ($mode & $DAILY);
+            $ret = categorywise ($fpem) if ($mode & $CATEGORYWISE);
+
+            $fpem = "";
         }
     }
 
@@ -366,7 +367,7 @@ sub daily
 
     local $ENV{"PEMTIME"} = "%b-%d %y"
                     if (!defined ($ENV{"PEMTIME"}) || $ENV{"PEMTIME"} eq "");
-    
+
     open ($FPEM, "<", "$file") or die ("$prog: could not open file `$file'\n");
     die ("$prog: input file `$file' is empty\n") if (-z $FPEM);
     while ($rec = <$FPEM>)
@@ -401,16 +402,18 @@ sub daily
         }
         if ($ldt ne $dt)
         {
-            if ($ldt ne "0" && $tdays > 0 && (++$cnt % $tdays == 0))
+            if ($ldt ne "0" && $tdays > 0 && ($cnt % $tdays == 0))
             {
                 show_total ($ldt, $wday, $tern, $tspnt);
             }
-            $ldt = $dt;
+            $cnt++;
             $flag = 0;
+            $ldt = $dt;
+
             $wday = strftime ("%A", localtime ($col[0]));
             if ($totl == 0) { printf ("$spc"); ln ("-", $lln); }
         }
-        $dt = "" if ($flag == 1);
+        $dt = "" if ($flag);
         if ($totl == 0)
         {
             printf ("$spc|$dfmt|%-30s|", $dt, $col[1]);
@@ -430,7 +433,7 @@ sub daily
     }
     close $FPEM;
 
-    return;
+    return $cnt;
 }
 
 
@@ -491,7 +494,7 @@ sub monthly
 
     for ($i = $lower; $i <= $upper; $i++)
     {
-        $fpem = $pemdir."/".$mn[$i] if ($^O eq "linux");
+        $fpem = $pemdir."/".$mn[$i];
         $fpem = $pemdir."\\".$mn[$i] if ($^O eq "MSWin32");
 
         my $FPEM = undef;
@@ -627,7 +630,7 @@ sub categorywise
     printf ("%10.2f|\n", $tspnt);
     printf ("$spc"); ln ("-", 65);
 
-    return;
+    return 1;
 }
 
 
