@@ -1,12 +1,13 @@
 #!/usr/bin/perl -w
 #
 # pem.pl: Pem is a script to manage my personal income and expenses. This
-# file is a part of the `pem' project version 0.7.7
+# file is a part of the `pem' project version 0.7.8
 # Copyright (C) 2007 2008 2009 Prasad J Pandit
 #
 # `pem' is a free software; you can redistribute it and/or modify it under
 # the terms of GNU General Public License as published by the Free Software
-# Foundation; But only under version 2 of the License.
+# Foundation; either version 3 of the license, or(at your option) any later
+# version.
 #
 # `pem' is distributed in the hope that it will be useful, but WITHOUT ANY
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -14,8 +15,7 @@
 # details.
 #
 # You should have received a copy of the GNU General Public License along
-# with `pem'; if not, write to the Free Software Foundation, Inc., 59 Temple
-# Place, Suite 330, Boston, MA  02111-1307  USA
+# with `pem'; if not, see: <http://www.gnu.org/licenses>.
 #
 
 use strict;
@@ -23,7 +23,7 @@ use warnings;
 use POSIX qw(strftime);
 
 my ($DAILY, $MONTHLY, $CATEGORYWISE) = (1, 2, 4);
-my ($ver, $prog, $pemdir, $fpem) = ("0.7.7", "", "", "");
+my ($ver, $prog, $pemdir, $fpem) = ("0.7.8", "", "", "");
 
 my @mn = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @wd = qw( Sunday Monday Tuesday Wednesday Thursday Friday Saturday );

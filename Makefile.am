@@ -14,7 +14,7 @@
 bin_PROGRAMS = pem
 pem_SOURCES = pem.pl
 
-man1_MANS = pem.1
+#man1_MANS = pem.1
 info_TEXINFOS = pem.texi
 
 dist_man_MANS = pem.1
