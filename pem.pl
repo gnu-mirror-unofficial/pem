@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 #
 # pem.pl: Pem is a script to manage my personal income and expenses. This
 # file is a part of the `pem' project version 0.7.8
@@ -34,7 +34,7 @@ my ($mm, $em, $yy, $tdays, $totl, $dfmt, $tag) = (0, 0, 0, 0, 0, "", "");
 
 sub usage
 {
-    printf ("Usage: %s [OPTIONS] [<description> <amount> ...]\n", $prog);
+    printf ("Usage: %s [OPTION] [DESCRIPTION AMOUNT]\n", $prog);
     return;
 }
 
@@ -44,7 +44,12 @@ sub printh
     my $fmt = " %-23s %s\n";
 
     usage ();
-    printf ("\nOptions: \n");
+
+    printf ("\n");
+    printf ("Manage personal income and expenses.\n");
+
+    printf ("\n");
+    printf ("Options: \n");
 
     printf ("\n");
     printf ($fmt, "  -c --category <name>", "categorise/tag your expenses");
@@ -209,6 +214,10 @@ sub initpem
 
     if ($^O eq "MSWin32")
     {
+        if (!defined ($ENV{"USERPROFILE"}) || $ENV{"USERPROFILE"} eq "")
+        {
+            die ("$prog: undefined environment variable: %USERPROFILE%\n");
+        }
         $pemdir = $ENV{"USERPROFILE"}."\\pem";
         if ($mode == 0)
         {
@@ -222,8 +231,12 @@ sub initpem
             die ("$prog: could not create `$pemdir'\n") if (-d ($pemdir) != 1);
         }
     }
-    else  # It is Linux or Unix :)
+    else  # It is GNU/Linux or Unix :)
     {
+        if (!defined ($ENV{"HOME"}) || $ENV{"HOME"} eq "")
+        {
+            die ("$prog: undefined environment variable: \$HOME\n");
+        }
         $pemdir = $ENV{"HOME"}."/.pem";
         if ($mode == 0)
         {
