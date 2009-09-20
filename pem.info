@@ -1,6 +1,6 @@
 This is pem.info, produced by makeinfo version 4.12 from pem.texi.
 
-This file documents the `pem-0.7.8' command, to help you keep track of
+This file documents the GNU `Pem' command, to help you keep track of
 your personal income and daily expenses.
 
      Copyright (C) 2007 2008 2009 Prasad J Pandit
@@ -14,17 +14,17 @@ Free Documentation License".
 
 INFO-DIR-SECTION Business and productivity
 START-INFO-DIR-ENTRY
-* pem: (pem).                                   Personal expenses manager.
+* pem: (pem).                               GNU personal expenses manager.
 END-INFO-DIR-ENTRY
 
 
 File: pem.info,  Node: Top,  Next: Overview,  Prev: (dir),  Up: (dir)
 
-pem-0.7.8
-*********
+GNU Pem
+*******
 
-     This file documents the `pem-0.7.8' command, to help you keep
-track of your personal income and daily expenses.
+     This file documents the GNU `Pem' command, to help you keep track
+of your personal income and daily expenses.
 
      Copyright (C) 2007 2008 2009 Prasad J Pandit
 
@@ -37,8 +37,8 @@ Free Documentation License".
 
 * Menu:
 
-* Overview      :: An introduction to pem
-* Invoking pem  :: How to use pem
+* Overview      :: Introduction to GNU Pem
+* Invoking pem  :: How to use GNU Pem
 * Problems      :: Reporting bugs
 
 Appendix
@@ -54,8 +54,8 @@ File: pem.info,  Node: Overview,  Next: Invoking pem,  Prev: Top,  Up: Top
 1.1 Introduction
 ================
 
-     `pem' is a console based simple utility, to help you keep track of
-your personal income and expenses, in an unusually elegant manner.
+     GNU `pem' is a console based simple utility to help you keep track
+of your personal income and expenses, in an unusually elegant manner.
 Obviously, using pem is extremely simple and easy. A command of the
 following form is all it takes
 
@@ -97,11 +97,11 @@ The later will show the cumulative results for each month till date.
 1.3 How `pem' happened
 ======================
 
-     Well...for quite a few months I was looking for some means to get
-my expenses in order. As never before, have I had a slightest clue as to
+     Well...for quite few months I was looking for some means to get my
+expenses in order. As never before, have I had a slightest clue as to
 how much money do I spend in a month and what on earth do I spend it
-over.  Of course there is/was nothing to bother about it, but still, I
-kind of wanted to know that.
+over.  Of course there is/was nothing to bother about it, but still I
+wanted to know.
 
      Often, we(me & my flat mate) would contemplate about a tool which
 is handy enough to use. All my Google searches failed to meet my
@@ -119,7 +119,7 @@ File: pem.info,  Node: Invoking pem,  Next: Problems,  Prev: Overview,  Up: Top
 2 Invoking pem
 **************
 
-     `pem' can be invoked by a simple command as
+     GNU `pem' can be invoked by a simple command as
 
      Usage: pem [OPTION] [DESCRIPTION  AMOUNT]
 
@@ -176,10 +176,8 @@ File: pem.info,  Node: Problems,  Next: GNU Free Documentation License,  Prev: I
 3.1 Reporting bugs
 ==================
 
-     If you think you have found a bug in `pem-0.7.8', please send an
-email to <pj.pandit-AT-yahoo.co.in> and while doing so, please include
-`pem-0.7.8' string in the subject line, and describe precisely about
-the behaviour of `pem-0.7.8'
+     Please send any suggestions/comments or bug reports you may have,
+to <pj.pandit-at-yahoo.co.in>. They are most welcome and appreciated.
 
 
 File: pem.info,  Node: GNU Free Documentation License,  Prev: Problems,  Up: Top
@@ -670,10 +668,10 @@ permit their use in free software.
 
 
 Tag Table:
-Node: Top763
-Node: Overview1600
-Node: Invoking pem4102
-Node: Problems4997
-Node: GNU Free Documentation License5404
+Node: Top761
+Node: Overview1597
+Node: Invoking pem4086
+Node: Problems4985
+Node: GNU Free Documentation License5294
 
 End Tag Table

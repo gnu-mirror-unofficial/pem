@@ -36,7 +36,8 @@ pem_SOURCES = pem.pl
 info_TEXINFOS = pem.texi
 
 dist_man_MANS = pem.1
-EXTRA_DIST = $(man_MANS) README COPYING INSTALL readme.ms pem.txt gfdl.texi
+EXTRA_DIST = $(man_MANS) README COPYING INSTALL NEWS ChangeLog \
+			 readme.ms pem.txt gfdl.texi
 
 pemdir=$(pkgdatadir)
 pem_DATA = pem.txt

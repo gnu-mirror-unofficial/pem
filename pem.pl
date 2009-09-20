@@ -182,7 +182,7 @@ sub check_options
         }
         elsif ($arg eq "-v" || $arg eq "--version")
         {
-            printf ("%s version %s\n", $prog, $ver);
+            printf ("GNU %s %s\n", ucfirst ($prog), $ver);
             exit 0;
         }
         elsif ($arg eq "-Y" || $arg eq "--year")

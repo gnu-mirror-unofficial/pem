@@ -45,19 +45,18 @@
 
 
 .ce 2
-pem - 0.7.8
-===========
+GNU Pem
+=======
 .LP
 Hi,
 .PP
-I am happy to give you this *new* version of Pem. Pem is a handy tool to
-help you keep track of your personal income and expenses. On GNU/Linux and
-other Unix-like systems, Pem works by storing the details in a CSV file,
-placed in the ~/.pem directory under your $HOME directory; On Windows, the
-same file is placed in pem directory, under the %USERPROFILE% directory.
-Each such file is named after the current month, and is automatically created
-by Pem when you enter the first record for the month. It is not advisable to
-edit these files by hand.
+GNU Pem is a handy tool to help you keep track of your personal income and
+expenses. On GNU/Linux and other Unix-like systems, Pem works by storing the
+details in a CSV file placed in the ~/.pem directory under your $HOME
+directory. On Windows, the same file is placed in pem directory, under
+the %USERPROFILE% directory. Each such file is named after the current month,
+and is automatically created by Pem when you enter the first record for a
+month. It is not advisable to edit these files by hand.
 .LP
 Installation:
 .br
@@ -82,10 +81,10 @@ $ ./configure --help.
 On Windows:
 .br
 -----------
-.br
+.sp
     Copy and paste the pem.pl file to the directory where you keep your
 other executable files, and make sure, this directory is included in your
-%PATH% variable. That\'s all, Pem is ready to serve you. :)
+%PATH% variable. That\'s all, GNU Pem is ready to serve you. :)
 .LP
 For usage information about pem, on GNU/Linux et al., try
 .DS I
@@ -103,7 +102,7 @@ that.
 .sp 2
 Bugs/Comments:
 .br
---------------
+==============
 .PP
 Please send any suggestions/comments or bug reports you may have, to
 <pj.pandit@yahoo.co.in>. They are most welcome and appreciated.

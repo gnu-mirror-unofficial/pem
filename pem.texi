@@ -3,17 +3,17 @@
 @setfilename pem.info
 @settitle info pem
 @setchapternewpage odd
-@settitle Pem: Personal expenses manager
+@settitle Pem: GNU personal expenses manager
 @paragraphindent 5
 @firstparagraphindent insert
 @c %**end of header
 
-@set UPDATED Jul 27 2009
+@set UPDATED Sep 15 2009
 @set EDITION 1
 @set VERSION 0.7.8
 
 @copying
-This file documents the @code{pem-@value{VERSION}} command, to help you
+This file documents the GNU @code{Pem} command, to help you
 keep track of your personal income and daily expenses.
 
 Copyright @copyright{} 2007 2008 2009 Prasad J Pandit
@@ -27,12 +27,12 @@ in the section entitled "GNU Free Documentation License".
 
 @dircategory Business and productivity
 @direntry
-* pem: (pem).                                   Personal expenses manager.
+* pem: (pem).                               GNU personal expenses manager.
 @end direntry
 
 @titlepage
-@title pem
-@subtitle personal expenses manager
+@title GNU pem
+@subtitle GNU personal expenses manager
 @subtitle Edition @value{EDITION}, for pem version @value{VERSION}
 @subtitle @value{UPDATED}
 @author by Prasad J Pandit
@@ -41,13 +41,13 @@ in the section entitled "GNU Free Documentation License".
 @contents
 @ifnottex
 @node Top, Overview, (dir), (dir)
-@top pem-@value{VERSION}
+@top GNU Pem
 @end ifnottex
 @insertcopying
 
 @menu
-* Overview      :: An introduction to pem
-* Invoking pem  :: How to use pem
+* Overview      :: Introduction to GNU Pem
+* Invoking pem  :: How to use GNU Pem
 * Problems      :: Reporting bugs
 
 Appendix
@@ -59,8 +59,8 @@ Appendix
 @c node-name, next, previous, up
 @chapter Overview
 @section Introduction
-@code{pem} is a console based simple utility, to help you keep track of
-your personal income and expenses, in an unusually elegant manner.
+GNU @code{pem} is a console based simple utility to help you keep track
+of your personal income and expenses, in an unusually elegant manner.
 Obviously, using pem is extremely simple and easy. A command of the
 following form is all it takes
 
@@ -97,11 +97,11 @@ While the first will list all your `travel' expenses in a month;
 The later will show the cumulative results for each month till date.
 
 @section How @code{pem} happened
-Well...for quite a few months I was looking for some means to get my
+Well...for quite few months I was looking for some means to get my
 expenses in order. As never before, have I had a slightest clue as to
 how much money do I spend in a month and what on earth do I spend it over.
-Of course there is/was nothing to bother about it, but still, I kind of
-wanted to know that.
+Of course there is/was nothing to bother about it, but still I wanted to
+know.
 
 Often, we(me & my flat mate) would contemplate about a tool which is
 handy enough to use. All my Google searches failed to meet my
@@ -116,7 +116,7 @@ morning I had released the first working version 0.1 of @code{pem}. :)
 @node Invoking pem, Problems, Overview, Top
 @c node-name, next, previous, up
 @chapter Invoking pem
-@code{pem} can be invoked by a simple command as
+GNU @code{pem} can be invoked by a simple command as
 
 Usage: pem [OPTION] [DESCRIPTION  AMOUNT]
 
@@ -162,10 +162,8 @@ show version information
 @c node-name, next, previous, up
 @chapter Problems
 @section Reporting bugs
-If you think you have found a bug in @code{pem-@value{VERSION}}, please
-send an email to <pj.pandit-AT-yahoo.co.in> and while doing so,
-please include @code{pem-@value{VERSION}} string in the subject line,
-and describe precisely about the behaviour of @code{pem-@value{VERSION}}
+Please send any suggestions/comments or bug reports you may have, to
+<pj.pandit-at-yahoo.co.in>. They are most welcome and appreciated.
 
 @node GNU Free Documentation License, , Problems, Top
 @appendix GNU Free Documentation License

@@ -19,23 +19,23 @@
 
 .TH pem 1
 .SH NAME
-\fBpem\fR \- personal expenses manager
+\fBpem\fR \- GNU personal expenses manager
 .SH SYNOPSYS
 .TP 5
 \fBpem\fR [\fBOPTIONS\fR] [<description> <amount> ...]
 .SH DESCRIPTION
 .PP
-\fBpem\fR is a handy tool to help you keep track of your personal income and
-expenses. Needless to say, using \fBpem\fR is extremely simple and easy.
+\fBGNU Pem\fR is a handy tool to help you keep track of your personal income
+and expenses. Needless to say, using \fBpem\fR is extremely simple and easy.
 A command of the following form is all it takes
 .LP
     $ pem "Bus ticket" 10.75
     $ pem \-f myexpenses.txt Breakfast 20
 .LP
-\fBpem\fR by default stores these details in a CSV file, named after the
-current month, and placed in the `~/.pem' directory under your $HOME directory.
-You may also specify some other file using the `\-f' option. Also, each amount
-is considered as an expenditure unless indicated otherwise by `\-e' option.
+\fBPem\fR stores these details in a CSV file, named after the current month,
+and placed in the `~/.pem' directory under your $HOME directory. You may
+specify some other file using the `\-f' option. Also, each amount is considered
+as an expenditure unless indicated otherwise by `\-e'.
 
 .LP
 Tags/Categories:
@@ -106,7 +106,7 @@ show version information
 .SH ENVIRONMENT
 .TP
 PEMTIME
-Pem recognizes the PEMTIME environment variable. PEMTIME defines the
+\fBPem\fR recognizes the PEMTIME environment variable. PEMTIME defines the
 format in which you want the `Date & Time' to be displayed. For example,
 if you export PEMTIME="%F", the date "May 31 2007" will be displayed as
 2007-05-31. For more information/options please see strftime(3).

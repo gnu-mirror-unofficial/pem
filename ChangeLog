@@ -1,0 +1,13 @@
+
+Sep 15 2009 P J P <pj.pandit@yahoo.co.in>
+
+	* Pem became an official GNU package, GNU Pem.
+
+	* NEWS: file added to track news about Pem releases.
+
+	* pem.1:
+	* pem.pl:
+	* pem.texi:
+	* readme.ms: Changes made to reflect the new status of a GNU package.
+
+	* Makefile.am: files ChangeLog & NEWS were added to EXTRA_DIST.

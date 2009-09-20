@@ -1,0 +1,5 @@
+
+pem-0.7.8:
+
+    * Pem became an official GNU package, GNU Pem.
+    * COPYING changed to GPLv3 or(at your choice) any later version.

@@ -68,8 +68,8 @@ bin_PROGRAMS = pem$(EXEEXT)
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(dist_man_MANS) \
 	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/config.h.in $(top_srcdir)/configure COPYING INSTALL \
-	install-sh missing texinfo.tex
+	$(srcdir)/config.h.in $(top_srcdir)/configure COPYING \
+	ChangeLog INSTALL NEWS install-sh missing texinfo.tex
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -217,7 +217,9 @@ pem_SOURCES = pem.pl
 # man1_MANS = pem.1
 info_TEXINFOS = pem.texi
 dist_man_MANS = pem.1
-EXTRA_DIST = $(man_MANS) README COPYING INSTALL readme.ms pem.txt gfdl.texi
+EXTRA_DIST = $(man_MANS) README COPYING INSTALL NEWS ChangeLog \
+			 readme.ms pem.txt gfdl.texi
+
 pemdir = $(pkgdatadir)
 pem_DATA = pem.txt
 all: config.h
