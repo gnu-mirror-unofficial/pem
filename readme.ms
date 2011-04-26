@@ -3,7 +3,7 @@
 \"
 \" readme.ms: This is a manuscript of the README file for `pem'. This file is
 \" part of the `pem' project version 0.7.8
-\" Copyright (C) 2007 2008 2009 Prasad J Pandit
+\" Copyright (C) 2007 - 2011 Prasad J Pandit
 \"
 \" `pem' is a free software; you can redistribute it and/or modify it under
 \" the terms of GNU General Public License as published by the Free Software
