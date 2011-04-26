@@ -3,6 +3,7 @@ aclocal.m4
 autom4te.*
 autom4te.cache.*
 config.h.in
+config.h.in~
 configure
 pem.info
 texinfo.tex
