@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 #
 # configure.ac: This is a base file to generate configure script for `pem'.
-# This file is part of the `pem' project version 0.7.8
+# This file is part of the `pem' project version 0.7.9
 # Copyright (C) 2007 - 2011 Prasad J Pandit
 #
 # `pem' is a free software; you can redistribute it and/or modify it under
@@ -20,7 +20,7 @@
 #
 
 AC_PREREQ(2.61)
-AC_INIT([pem], [0.7.8], [pj.pandit@yahoo.co.in])
+AC_INIT([pem], [0.7.9], [pj.pandit@yahoo.co.in])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([pem.pl])
 AC_CONFIG_HEADER([config.h])

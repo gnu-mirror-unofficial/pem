@@ -1,4 +1,9 @@
 
+pem-0.7.9:
+
+    * New option --bare to show unformatted reports, especially on
+      a small(40x15) screen.
+
 pem-0.7.8:
 
     * Pem became an official GNU package, GNU Pem.

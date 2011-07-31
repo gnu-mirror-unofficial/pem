@@ -1,3 +1,7 @@
+Aug  1 2011 P J P <pj.pandit@yahoo.co.in>
+
+	* pem.pl: new option --bare to show unformatted reports. Version
+	changed to 0.7.9.
 
 Sep 15 2009 P J P <pj.pandit@yahoo.co.in>
 

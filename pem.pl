@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 #
 # pem.pl: Pem is a script to manage my personal income and expenses. This
-# file is a part of the `pem' project version 0.7.8
+# file is a part of the `pem' project version 0.7.9
 # Copyright (C) 2007 - 2011 Prasad J Pandit
 #
 # `pem' is a free software; you can redistribute it and/or modify it under
@@ -22,8 +22,8 @@ use strict;
 use warnings;
 use POSIX qw(strftime);
 
-my ($DAILY, $MONTHLY, $CATEGORYWISE) = (1, 2, 4);
-my ($ver, $prog, $pemdir, $fpem) = ("0.7.8", "", "", "");
+my ($ver, $prog, $pemdir, $fpem) = ("0.7.9", "", "", "");
+my ($BARE, $DAILY, $MONTHLY, $CATEGORYWISE) = (0, 1, 2, 4);
 
 my @mn = qw( Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 my @wd = qw( Sunday Monday Tuesday Wednesday Thursday Friday Saturday );
@@ -52,6 +52,7 @@ sub printh
     printf ("Options: \n");
 
     printf ("\n");
+    printf ($fmt, "  -b --bare", "show unformatted report");
     printf ($fmt, "  -c --category <name>", "categorise/tag your expenses");
     printf ($fmt, "  -e --earned", "indicates income");
     printf ($fmt, "  -f --file <name>", "specify file name");
@@ -86,7 +87,12 @@ sub check_options
     for ($i = 0; $i < @ARGV; $i++)
     {
         $arg = $ARGV[$i];
-        if ($arg eq "-c" || $arg eq "--category")
+        if ($arg eq "-b" || $arg eq "--bare")
+        {
+            $BARE = 1;                    # show unformatted report
+            $cnt++;
+        }
+        elsif ($arg eq "-c" || $arg eq "--category")
         {
             die ("$prog: value <name> missing\n") if ($arg eq $ARGV[-1]);
             $arg = $ARGV[++$i];
@@ -331,7 +337,7 @@ sub show
 {
     my ($lower, $upper, $ret) = ($mm, $em, 0);
 
-    if ($mode & $DAILY  ||  $mode & $CATEGORYWISE)
+    if ($mode & $DAILY || $mode & $CATEGORYWISE)
     {
         if ($lower == 0)
         {
@@ -352,7 +358,11 @@ sub show
                 $fpem = $pemdir."\\".$mn[$i - 1] if ($^O eq "MSWin32");
             }
 
-            $ret = daily ($fpem) if ($mode & $DAILY);
+            if ($mode & $DAILY)
+            {
+                $ret = daily ($fpem) if (!$BARE);
+                $ret = daily_bare ($fpem) if ($BARE);
+            }
             $ret = categorywise ($fpem) if ($mode & $CATEGORYWISE);
 
             $fpem = "";
@@ -443,6 +453,86 @@ sub daily
         printf ("$spc|$dfmt|%-30s|", "", "Average expense/day");
         printf ("%21.2f|\n", $tspnt / no_of_days ($col[0]));
         printf ("$spc"); ln ("-", $lln);
+    }
+    close $FPEM;
+
+    return $cnt;
+}
+
+
+sub daily_bare
+{
+    my @formal = @_;
+
+    my ($cnt, $flag, $rec, $ldt) = (0, 0, "", "0");
+    my ($tern, $tspnt, $wday, $dt) = (0, 0, "", "");
+    my ($file, @col, $FPEM) = ($formal[0], "", undef);
+
+    local $ENV{"PEMTIME"} = "%b-%d"
+                    if(!defined($ENV{"PEMTIME"}) || $ENV{"PEMTIME"} eq "");
+
+    open ($FPEM, "<", "$file") or die ("$prog: could not open file `$file'\n");
+    die ("$prog: input file `$file' is emty\n") if (-z $FPEM);
+    while ($rec = <$FPEM>)
+    {
+        chomp ($rec);
+        @col = split (',', $rec);
+
+        $tag = $ARGV[0];
+        if (defined ($tag))
+        {
+            next if ((!defined ($col[4]) || (!is_subset ($col[4], $tag)
+                                         && !is_subset ($tag, $col[4])))
+                     && (!is_subset ($col[1], $tag)
+                         && !is_subset ($tag, $col[1])));
+        }
+
+        $dt = strftime ($ENV{"PEMTIME"}, localtime ($col[0]));
+
+        if ($flag == 0)
+        {
+            printf ("%-28s %10s\n", "    Description", "Amount");
+            printf ("%s\n", "=" x 40);
+        }
+        if ($ldt ne $dt)
+        {
+            if ($ldt ne "0" && $tdays > 0 && ($cnt % $tdays == 0))
+            {
+                printf ("%s\n", "-" x 40);
+                printf ("%-28s %10.2f\n", "$wday (Total)", $tern - $tspnt);
+            }
+            $cnt++;
+            $flag = 0;
+            $ldt = $dt;
+
+            $wday = strftime ("%A", localtime ($col[0]));
+            if ($totl == 0) { printf ("$spc"); ln ("-", $lln); }
+        }
+        $dt = "" if ($flag);
+        if ($totl == 0)
+        {
+            my $amt = 0;
+            $amt = "+".$col[2] if ($col[2] > 0);
+            $amt = "-".$col[3] if ($col[3] > 0);
+
+            printf ("%s\n", $dt) if ($dt ne "");
+            printf (" %-28s %+9.2f\n", $col[1], $amt);
+        }
+        $tern  += $col[2];
+        $tspnt += $col[3];
+        $flag = 1;
+    }
+    if ($flag)
+    {
+        printf ("%s\n", "-" x 40);
+        printf ("%-28s %10.2f\n", "Earned", $tern);
+        printf ("%-28s %10.2f\n", "Spent", $tspnt);
+
+        printf ("%s\n", "-" x 40);
+        printf ("%-28s %10.2f\n", "$wday (Total)", $tern - $tspnt);
+
+        $tspnt = $tspnt / no_of_days ($col[0]);
+        printf ("%-28s %10.2f\n", "Average expense/day", $tspnt);
     }
     close $FPEM;
 

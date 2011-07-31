@@ -2,7 +2,7 @@
 \" Use nroff -ms <file-name> to format this file.
 \"
 \" readme.ms: This is a manuscript of the README file for `pem'. This file is
-\" part of the `pem' project version 0.7.8
+\" part of the `pem' project version 0.7.9
 \" Copyright (C) 2007 - 2011 Prasad J Pandit
 \"
 \" `pem' is a free software; you can redistribute it and/or modify it under
