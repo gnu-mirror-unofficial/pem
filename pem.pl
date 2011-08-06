@@ -468,7 +468,7 @@ sub daily_bare
     my ($tern, $tspnt, $wday, $dt) = (0, 0, "", "");
     my ($file, @col, $FPEM) = ($formal[0], "", undef);
 
-    local $ENV{"PEMTIME"} = "%b-%d"
+    local $ENV{"PEMTIME"} = "%b-%d %y"
                     if(!defined($ENV{"PEMTIME"}) || $ENV{"PEMTIME"} eq "");
 
     open ($FPEM, "<", "$file") or die ("$prog: could not open file `$file'\n");
@@ -515,7 +515,7 @@ sub daily_bare
             $amt = "+".$col[2] if ($col[2] > 0);
             $amt = "-".$col[3] if ($col[3] > 0);
 
-            printf ("%s\n", $dt) if ($dt ne "");
+            printf ("%s:\n%s\n", $dt, "-" x 10) if ($dt ne "");
             printf (" %-28s %+9.2f\n", $col[1], $amt);
         }
         $tern  += $col[2];
@@ -524,9 +524,9 @@ sub daily_bare
     }
     if ($flag)
     {
-        printf ("%s\n", "-" x 40);
+        printf ("%s\n", "=" x 40);
         printf ("%-28s %10.2f\n", "Earned", $tern);
-        printf ("%-28s %10.2f\n", "Spent", $tspnt);
+        printf ("%-28s %10.2f\n", "Spent", "-".$tspnt);
 
         printf ("%s\n", "-" x 40);
         printf ("%-28s %10.2f\n", "$wday (Total)", $tern - $tspnt);
